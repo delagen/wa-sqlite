@@ -28,11 +28,11 @@ type SQLiteCompatibleType =
  *
  * Objects with this interface can be passed to {@link SQLiteAPI.vfs_register}
  * to define a new filesystem.
- * 
+ *
  * There are [synchronous](https://github.com/rhashimoto/wa-sqlite/blob/master/src/examples/MemoryVFS.js)
  * and [asynchronous](https://github.com/rhashimoto/wa-sqlite/blob/master/src/examples/MemoryAsyncVFS.js)
  * example VFS classes in the repository.
- * 
+ *
  * @see https://sqlite.org/vfs.html
  * @see https://sqlite.org/c3ref/io_methods.html
  */
@@ -354,7 +354,7 @@ declare interface SQLiteAPI {
    * @param db database pointer
    * @returns number of rows modified
    */
-  changes(db): number;
+  changes(db: number): number;
 
   /**
    * Reset all bindings on a prepared statement.
@@ -378,7 +378,7 @@ declare interface SQLiteAPI {
    * @param db database pointer
    * @returns `SQLITE_OK` (throws exception on error)
    */
-  close(db): Promise<number>;
+  close(db: number): Promise<number>;
 
   /**
    * Call the appropriate `column_*` function based on the column type
@@ -494,7 +494,7 @@ declare interface SQLiteAPI {
 
   /**
    * Register a commit hook
-   * 
+   *
    * @see https://www.sqlite.org/c3ref/commit_hook.html
    *
    * @param db database pointer
@@ -507,9 +507,9 @@ declare interface SQLiteAPI {
 
   /**
    * Create or redefine SQL functions
-   * 
+   *
    * The application data passed is ignored. Use closures instead.
-   * 
+   *
    * If any callback function returns a Promise, that function must
    * be declared `async`, i.e. it must allow use of `await`.
    * @see https://sqlite.org/c3ref/create_function.html
@@ -518,9 +518,9 @@ declare interface SQLiteAPI {
    * @param nArg number of function arguments
    * @param eTextRep text encoding (and other flags)
    * @param pApp application data (ignored)
-   * @param xFunc 
-   * @param xStep 
-   * @param xFinal 
+   * @param xFunc
+   * @param xStep
+   * @param xFinal
    * @returns `SQLITE_OK` (throws exception on error)
    */
   create_function(
@@ -565,7 +565,7 @@ declare interface SQLiteAPI {
   /**
    * Destroy a prepared statement object compiled by {@link statements}
    * with the `unscoped` option set to `true`
-   * 
+   *
    * This function does *not* throw on error.
    * @see https://www.sqlite.org/c3ref/finalize.html
    * @param stmt prepared statement pointer
@@ -621,9 +621,9 @@ declare interface SQLiteAPI {
 
   /**
    * Specify callback to be invoked between long-running queries
-   * 
+   *
    * The application data passed is ignored. Use closures instead.
-   * 
+   *
    * If any callback function returns a Promise, that function must
    * be declared `async`, i.e. it must allow use of `await`.
    * @param db database pointer
@@ -631,7 +631,7 @@ declare interface SQLiteAPI {
    * @param handler
    * @param userData
    */
-  progress_handler(db: number, nProgressOps: number, handler: (userData: any) => number|Promise<number>, userData);
+  progress_handler(db: number, nProgressOps: number, handler: (userData: any) => number|Promise<number>, userData: any): void;
 
   /**
    * Reset a prepared statement object
@@ -721,7 +721,7 @@ declare interface SQLiteAPI {
     db: number,
     authFunction: (userData: any, iActionCode: number, param3: string|null, param4: string|null, param5: string|null, param6: string|null) => number|Promise<number>,
     userData: any): number;
-  
+
   /**
    * Get statement SQL
    * @see https://www.sqlite.org/c3ref/expanded_sql.html
@@ -732,7 +732,7 @@ declare interface SQLiteAPI {
 
   /**
    * SQL statement iterator
-   * 
+   *
    * This function manages statement compilation by creating an async
    * iterator that yields a prepared statement handle on each iteration.
    * It is typically used with a `for await` loop (in an async function),
@@ -750,14 +750,14 @@ declare interface SQLiteAPI {
    *   // Change bindings, reset, and execute again if desired.
    * }
    * ```
-   * 
+   *
    * By default, the lifetime of a yielded prepared statement is managed
    * automatically by the iterator, ending at the end of each iteration.
    * {@link finalize} should *not* be called on a statement provided by
    * the iterator unless the `unscoped` option is set to `true` (that
    * option is provided for applications that wish to manage statement
    * lifetimes manually).
-   * 
+   *
    * If using the iterator manually, i.e. by calling its `next`
    * method, be sure to call the `return` method if iteration
    * is abandoned before completion (`for await` and other implicit
@@ -765,7 +765,7 @@ declare interface SQLiteAPI {
    * to ensure that all allocated resources are released.
    * @see https://www.sqlite.org/c3ref/prepare.html
    * @param db database pointer
-   * @param sql 
+   * @param sql
    * @param options
    */
   statements(db: number, sql: string, options?: SQLitePrepareOptions): AsyncIterable<number>;
@@ -781,7 +781,7 @@ declare interface SQLiteAPI {
 
    /**
    * Register an update hook
-   * 
+   *
    * The callback is invoked whenever a row is updated, inserted, or deleted
    * in a rowid table on this connection.
    * @see https://www.sqlite.org/c3ref/update_hook.html
@@ -791,7 +791,7 @@ declare interface SQLiteAPI {
    * - SQLITE_INSERT: 18
    * - SQLITE_UPDATE: 23
    * @see https://www.sqlite.org/c3ref/c_alter_table.html
-   * 
+   *
    * @param db database pointer
    * @param callback
    */
@@ -1142,25 +1142,25 @@ declare module '@journeyapps/wa-sqlite' {
 /** @ignore */
 declare module "@journeyapps/wa-sqlite/dist/wa-sqlite.mjs" {
   function ModuleFactory(config?: object): Promise<any>;
-  export = ModuleFactory;
+  export default ModuleFactory;
 }
 
 /** @ignore */
 declare module "@journeyapps/wa-sqlite/dist/wa-sqlite-async.mjs" {
   function ModuleFactory(config?: object): Promise<any>;
-  export = ModuleFactory;
+  export default ModuleFactory;
 }
 
 /** @ignore */
 declare module "@journeyapps/wa-sqlite/dist/mc-wa-sqlite.mjs" {
   function ModuleFactory(config?: object): Promise<any>;
-  export = ModuleFactory;
+  export default ModuleFactory;
 }
 
 /** @ignore */
 declare module "@journeyapps/wa-sqlite/dist/mc-wa-sqlite-async.mjs" {
   function ModuleFactory(config?: object): Promise<any>;
-  export = ModuleFactory;
+  export default ModuleFactory;
 }
 
 /** @ignore */
